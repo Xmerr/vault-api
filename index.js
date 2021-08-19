@@ -2,17 +2,19 @@ require('dotenv').config();
 const port = process.env.PORT;
 const Koa = require('koa');
 const parser = require('koa-bodyparser');
+const cors = require('koa2-cors');
 const { koaSwagger } = require('koa2-swagger-ui')
 
 const app = new Koa();
 
-const accounts = require('./routes/accounts');
+const account = require('./routes/account');
 const { router, config } = require('./routes/swag');
 
 app
+    .use(cors({ allowMethods: [ 'GET', 'PUT', 'POST', 'DELETE' ] }))
     .use(parser({ enableTypes: [ 'json' ]}))
     .use(koaSwagger(config))
-    .use(accounts.routes())
+    .use(account.routes())
     .use(router.routes())
     .use(async ctx => {
         ctx.status = 404;

@@ -1,7 +1,7 @@
 const Router = require('koa-router');
 
 const router = new Router({
-    prefix: '/accounts'
+    prefix: '/account'
 });
 
 /**
@@ -22,8 +22,13 @@ const router = new Router({
  *              201:
  *                  description: Successfully Added Pet
  */
-router.get('/', async ctx => {
-    ctx.body = 'gotem';
+router.post('/login', async ctx => {
+    const { username } = ctx.request.body;
+    ctx.staus = 200;
+    ctx.body = {
+        username,
+        token: '123'
+    };
 });
 
 module.exports = router;
