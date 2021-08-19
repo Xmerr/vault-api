@@ -1,4 +1,5 @@
-const port = 28891;
+require('dotenv').config();
+const port = process.env.PORT;
 const Koa = require('koa');
 const parser = require('koa-bodyparser');
 const { koaSwagger } = require('koa2-swagger-ui')
