@@ -155,7 +155,7 @@ router.post(
             db,
         } = ctx.state;
 
-        const badMatch = () => ctx.throw(403, 'Invalid Username or Password');
+        const badMatch = () => ctx.throw(409, 'Invalid Username or Password');
 
         const user = await users.getByUsername(username, db);
         if (!user) {
