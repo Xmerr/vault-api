@@ -1,5 +1,5 @@
 const path = require('path');
-const Router = require('koa-router');;
+const Router = require('koa-router');
 const swaggerJsdoc = require('swagger-jsdoc');
 
 const router = new Router({ prefix: '/swag' });
@@ -9,7 +9,7 @@ const config = {
     swaggerOptions: {
         url: 'http://api.bank.io/swag', // Where to pull the doc config from - could be stored in the config yamls
     },
-}
+};
 
 router.get('/', async ctx => {
     const options = {
@@ -26,10 +26,9 @@ router.get('/', async ctx => {
 
     const openapiSpecification = swaggerJsdoc(options);
     ctx.body = openapiSpecification;
-    // ctx.body = 'worked';
 });
 
 module.exports = {
     router,
-    config
+    config,
 };

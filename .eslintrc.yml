@@ -1,0 +1,33 @@
+parserOptions:
+    ecmaVersion: 2018
+    ecmaFeatures:
+        impliedStrict: true
+
+env:
+    node: true
+    jest: true
+    es6: true # es5 was the last time globals were introduced e.g. 'Promise'
+
+plugins:
+    - prettier
+
+extends:
+    - eslint:recommended
+
+rules:
+    eqeqeq: 2
+    quotes:
+        - 2
+        - single
+        - 
+            avoidEscape: true
+    prefer-const:
+        - 2
+        -
+            destructuring: any
+    no-console: off
+    no-var: 2
+    prettier/prettier:
+        - error
+        - { endOfLine: auto }
+        - usePrettierrc: true
