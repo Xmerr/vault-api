@@ -1,2 +1,2 @@
 insert into users (username, password, first_name, last_name, email, phone)
-values ('Guest', '$2b$08$qITJtd07oSEPZZHRr39CBuDuceseW5V760pUNkZWYX0g3OxHBdza6', 'Foo', 'Bar', 'test@test.com', '555-555-5555');
+values ('Xmer', '$2b$08$GAZDsOP6TJWe/1eAakVmbOAnicrm0/LIHntwsxbtGDMHA1b29DUiO', 'Wiley', 'Hilton', 'test@test.com', '555-555-5555');

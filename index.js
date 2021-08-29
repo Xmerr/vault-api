@@ -7,14 +7,14 @@ const session = require('koa-session');
 const { koaSwagger } = require('koa2-swagger-ui');
 const auth = require('./middleware/auth');
 const error = require('./middleware/error');
+const routes = require('./routes');
 
 const app = new Koa();
 require('koa-validate')(app);
 
 app.keys = [process.env.SECRET];
 
-const user = require('./routes/user');
-const { router, config } = require('./routes/swag');
+const router = require('./routes/swag');
 
 app.use(
     cors({
@@ -24,11 +24,17 @@ app.use(
 )
     .use(parser({ enableTypes: ['json'] }))
     .use(session(app))
-    .use(koaSwagger(config))
+    .use(
+        koaSwagger({
+            routePrefix: '/swagger', // Where to find the docs
+            swaggerOptions: {
+                url: 'http://api.bank.io/swag', // Where to pull the doc config from - should be moved to the .env file
+            },
+        })
+    )
     .use(error)
-    .use(auth)
-    .use(user.routes())
-    .use(router.routes())
-    .listen(port);
+    .use(auth);
+
+routes(app).use(router.routes()).listen(port);
 
 console.log(`app listening on port: ${port}`);

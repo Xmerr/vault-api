@@ -129,11 +129,11 @@ router.post(
  *                              username:
  *                                  type: string
  *                                  description: Login name
- *                                  example: Guest
+ *                                  example: Xmer
  *                              password:
  *                                  type: string
  *                                  description: Password for that login
- *                                  example: guest
+ *                                  example: password
  *          responses:
  *              202:
  *                  description: Successfully Logged In

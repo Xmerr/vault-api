@@ -13,7 +13,7 @@ This project requires a `.env` file with the following properties:
 ```
 PORT=<port number to run on>
 SECRET=<random string>
-SALT_ROUNDS=<random number>
+SALT_ROUNDS=<random number (if you don't use 8 the seed data will not work)>
 PG_STRING=<Connection string to postgres database>
 ```
 
