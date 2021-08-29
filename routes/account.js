@@ -169,6 +169,9 @@ router.post(
 
         ctx.status = 202;
         ctx.session.userId = user.id;
+        ctx.body = {
+            id: user.id,
+        };
     }
 );
 
@@ -201,6 +204,9 @@ router.get('/', async ctx => {
 router.delete('/logout', userRequired, async ctx => {
     ctx.status = 202;
     ctx.session = null;
+    ctx.body = {
+        id: null,
+    };
 });
 
 module.exports = router;

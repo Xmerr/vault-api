@@ -1,6 +1,6 @@
-const queries = {};
+const userQueries = {};
 
-queries.getById = (id, db) =>
+userQueries.getById = (id, db) =>
     db.oneOrNone(
         `
             select *
@@ -10,7 +10,7 @@ queries.getById = (id, db) =>
         { id }
     );
 
-queries.getByUsername = (username, db) =>
+userQueries.getByUsername = (username, db) =>
     db.oneOrNone(
         `
             select *
@@ -20,7 +20,7 @@ queries.getByUsername = (username, db) =>
         { username }
     );
 
-queries.create = (userObject, db) =>
+userQueries.create = (userObject, db) =>
     db.oneOrNone(
         `
             insert into accounts.users (
@@ -43,4 +43,4 @@ queries.create = (userObject, db) =>
         userObject
     );
 
-module.exports = queries;
+module.exports = userQueries;
