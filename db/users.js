@@ -4,7 +4,7 @@ userQueries.getById = (id, db) =>
     db.oneOrNone(
         `
             select *
-            from accounts.users u
+            from public.users u
             where id = $(id)
         `,
         { id }
@@ -14,7 +14,7 @@ userQueries.getByUsername = (username, db) =>
     db.oneOrNone(
         `
             select *
-            from accounts.users u
+            from public.users u
             where username ilike $(username)
         `,
         { username }
@@ -23,7 +23,7 @@ userQueries.getByUsername = (username, db) =>
 userQueries.create = (userObject, db) =>
     db.oneOrNone(
         `
-            insert into accounts.users (
+            insert into public.users (
                 username,
                 password,
                 first_name,

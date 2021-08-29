@@ -13,7 +13,7 @@ require('koa-validate')(app);
 
 app.keys = [process.env.SECRET];
 
-const account = require('./routes/account');
+const user = require('./routes/user');
 const { router, config } = require('./routes/swag');
 
 app.use(
@@ -27,7 +27,7 @@ app.use(
     .use(koaSwagger(config))
     .use(error)
     .use(auth)
-    .use(account.routes())
+    .use(user.routes())
     .use(router.routes())
     .listen(port);
 

@@ -6,7 +6,7 @@ const userRequired = require('../middleware/userRequired');
 const users = require('../db/users');
 
 const router = new Router({
-    prefix: '/account',
+    prefix: '/user',
 });
 
 const createUser = async (params, db) => {
@@ -22,9 +22,9 @@ const createUser = async (params, db) => {
 
 /**
  * @swagger
- * /account/create:
+ * /user/create:
  *      post:
- *          tags: [Account]
+ *          tags: [User]
  *          summary: Logs the user into the site
  *          description: Accepts username and password, compares that to the database, then sets a cookie to store userid for future requests
  *          requestBody:
@@ -66,7 +66,7 @@ const createUser = async (params, db) => {
  *                                  example: test@test.com
  *          responses:
  *              201:
- *                  description: Account Successfully Created
+ *                  description: User Successfully Created
  */
 router.post(
     '/create',
@@ -110,9 +110,9 @@ router.post(
 
 /**
  * @swagger
- * /account/login:
+ * /user/login:
  *      post:
- *          tags: [Account]
+ *          tags: [User]
  *          summary: Logs the user into the site
  *          description: Accepts username and password, compares that to the database, then sets a cookie to store userid for future requests
  *          requestBody:
@@ -177,9 +177,9 @@ router.post(
 
 /**
  * @swagger
- * /account:
+ * /user:
  *      get:
- *          tags: [Account]
+ *          tags: [User]
  *          summary: Returns user info
  *          description: Returns the user object if the user is logged in
  *          responses:
@@ -192,9 +192,9 @@ router.get('/', async ctx => {
 
 /**
  * @swagger
- * /account/logout:
+ * /user/logout:
  *      delete:
- *          tags: [Account]
+ *          tags: [User]
  *          summary: Clears the session for this user
  *          description: If the user is logged in this route should log them out
  *          responses:
