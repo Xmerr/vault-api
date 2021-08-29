@@ -7,10 +7,8 @@
         {
             "type": "pwa-node",
             "request": "launch",
-            "name": "Bank Api",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
+            "name": "The Vault Api",
+            "skipFiles": ["<node_internals>/**"],
             "program": "${workspaceFolder}\\index.js"
         }
     ]
