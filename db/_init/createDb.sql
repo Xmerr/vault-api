@@ -1,50 +1,47 @@
 create extension if not exists "uuid-ossp";
 
-CREATE TABLE "users" (
-  "id" uuid PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),
-  "username" varchar NOT NULL,
-  "password" varchar NOT NULL,
-  "first_name" varchar NOT NULL,
-  "last_name" varchar NOT NULL,
-  "email" varchar,
-  "phone" varchar,
-  "created_on" timestamptz  NOT NULL DEFAULT (now())
+create table users (
+  id uuid primary key not null default (uuid_generate_v4()),
+  username varchar not null,
+  password varchar not null,
+  first_name varchar not null,
+  last_name varchar not null,
+  email varchar,
+  phone varchar,
+  created_on timestamptz  not null default (now())
 );
 
-CREATE TABLE "accounts" (
-  "id" uuid PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),
-  "name" varchar NOT NULL,
-  "account_type" uuid NOT NULL,
-  "opened_on" timestamptz  NOT NULL DEFAULT (now())
+create table accounts (
+  id uuid primary key not null default (uuid_generate_v4()),
+  account_type uuid not null,
+  opened_on timestamptz not null default (now())
 );
 
-CREATE TABLE "accounts_to_users" (
-  "id" uuid PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),
-  "user_id" uuid NOT NULL,
-  "account_id" uuid NOT NULL
+create table accounts_to_users (
+  id uuid primary key not null default (uuid_generate_v4()),
+  nickname varchar not null,
+  user_id uuid not null,
+  account_id uuid not null
 );
 
-CREATE TABLE "account_types" (
-  "id" uuid PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),
-  "name" varchar NOT NULL,
-  "investment" boolean NOT NULL DEFAULT false,
-  "interest_rate" numeric(7, 4) NOT NULL DEFAULT 0
+create table account_types (
+  id uuid primary key not null default (uuid_generate_v4()),
+  name varchar not null,
+  investment boolean not null default false,
+  interest_rate numeric(7, 4) not null default 0
 );
 
-CREATE TABLE "transactions" (
-  "id" uuid PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),
-  "account_id" uuid NOT NULL,
-  "amount" integer NOT NULL,
-  "name" varchar NOT NULL,
-  "details" varchar NOT NULL,
-  "created_on" timestamptz  NOT NULL DEFAULT (now())
+create table transactions (
+  id uuid primary key not null default (uuid_generate_v4()),
+  account_id uuid not null,
+  amount integer not null,
+  name varchar not null,
+  details varchar not null,
+  created_on timestamptz  not null default (now())
 );
 
-ALTER TABLE "accounts_to_users" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
-
-ALTER TABLE "accounts_to_users" ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("id");
-
-ALTER TABLE "accounts" ADD FOREIGN KEY ("account_type") REFERENCES "account_types" ("id");
-
-ALTER TABLE "transactions" ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("id");
+alter table accounts_to_users add foreign key (user_id) references users (id) on delete cascade;
+alter table accounts_to_users add foreign key (account_id) references accounts (id) on delete cascade;
+alter table accounts add foreign key (account_type) references account_types (id) on delete cascade;
+alter table transactions add foreign key (account_id) references accounts (id) on delete cascade;
 

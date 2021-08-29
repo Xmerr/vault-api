@@ -14,8 +14,6 @@ require('koa-validate')(app);
 
 app.keys = [process.env.SECRET];
 
-const router = require('./routes/swag');
-
 app.use(
     cors({
         allowMethods: ['GET', 'PUT', 'POST', 'DELETE'],
@@ -35,6 +33,6 @@ app.use(
     .use(error)
     .use(auth);
 
-routes(app).use(router.routes()).listen(port);
+routes(app).listen(port);
 
 console.log(`app listening on port: ${port}`);

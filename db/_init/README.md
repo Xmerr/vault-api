@@ -10,7 +10,7 @@ Make sure you run both `createDb.sql` and `seed.sql`, in that order, before atte
 
 ---
 
-### Database Diagram was made using [dbdiagram.io](https://dbdiagram.io/d/612ae885825b5b0146e92c04)
+### Database Diagram was made using [dbdiagram.io](https://dbdiagram.io/)
 
 The diagram can be recreated by using the following code in their editor:
 
@@ -23,18 +23,18 @@ Table "users" {
   "last_name" varchar [not null]
   "email" varchar
   "phone" varchar
-  "created_on" timestamptz [not null, default: `now()`]
+  "created_on" timestamp [not null, default: `now()`]
 }
 
 Table "accounts" {
   "id" uuid [pk, not null, default: `uuid_generate_v4()`]
-  "name" varchar [not null]
   "account_type" uuid [not null]
-  "opened_on" timestamptz [not null, default: `now()`]
+  "opened_on" timestamp [not null, default: `now()`]
 }
 
 Table "accounts_to_users" {
   "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "nickname" varchar [not null]
   "user_id" uuid [not null]
   "account_id" uuid [not null]
 }
@@ -52,15 +52,14 @@ Table "transactions" {
   "amount" integer [not null]
   "name" varchar [not null]
   "details" varchar [not null]
-  "created_on" timestamptz [not null, default: `now()`]
+  "created_on" timestamp [not null, default: `now()`]
 }
 
-Ref:"users"."id" < "accounts_to_users"."user_id"
+Ref:"users"."id" < "accounts_to_users"."user_id" [delete: cascade]
 
-Ref:"accounts"."id" < "accounts_to_users"."account_id"
+Ref:"accounts"."id" < "accounts_to_users"."account_id" [delete: cascade]
 
-Ref:"account_types"."id" < "accounts"."account_type"
+Ref:"account_types"."id" < "accounts"."account_type" [delete: cascade]
 
-Ref:"accounts"."id" < "transactions"."account_id"
-
+Ref:"accounts"."id" < "transactions"."account_id" [delete: cascade]
 ```

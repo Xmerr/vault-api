@@ -9,23 +9,12 @@ const router = new Router({
     prefix: '/user',
 });
 
-const createUser = async (params, db) => {
-    const usernameTaken = await users.getByUsername(params.username, db);
-
-    if (usernameTaken) {
-        throw 409;
-    }
-
-    const user = await users.create(params, db);
-    return user;
-};
-
 /**
  * @swagger
  * /user/create:
  *      post:
  *          tags: [User]
- *          summary: Logs the user into the site
+ *          summary: Creates a user account and logs them in
  *          description: Accepts username and password, compares that to the database, then sets a cookie to store userid for future requests
  *          requestBody:
  *              description: Credentials
@@ -82,26 +71,33 @@ router.post(
     }),
     async ctx => {
         const {
-            body: { password },
+            body: { password, username },
             db,
         } = ctx.state;
+
+        const usernameTaken = await users.getByUsername(username, db);
+        if (usernameTaken) {
+            ctx.throw(409, 'Username Already Taken');
+        }
+
         const pw = await bcrypt.hash(password, Number(process.env.SALT_ROUNDS));
 
-        const user = await createUser(
-            {
-                ...ctx.state.body,
-                password: pw,
-            },
-            db
-        ).catch(e => {
-            switch (e) {
-                case 409:
-                    ctx.throw(409, 'Username Already Taken');
-                    return;
-                default:
-                    ctx.throw(500, e);
-            }
-        });
+        const user = await users
+            .create(
+                {
+                    ...ctx.state.body,
+                    password: pw,
+                },
+                db
+            )
+            .catch(e => {
+                switch (e) {
+                    case 409:
+                        return;
+                    default:
+                        ctx.throw(500, e);
+                }
+            });
 
         ctx.session.userId = user.id;
         ctx.status = 201;
