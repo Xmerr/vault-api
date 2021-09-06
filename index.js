@@ -5,6 +5,7 @@ const cors = require('koa2-cors');
 const parser = require('koa-bodyparser');
 const session = require('koa-session');
 const { koaSwagger } = require('koa2-swagger-ui');
+const attachDb = require('./middleware/attachDb');
 const auth = require('./middleware/auth');
 const error = require('./middleware/error');
 const routes = require('./routes');
@@ -31,6 +32,7 @@ app.use(
         })
     )
     .use(error)
+    .use(attachDb)
     .use(auth);
 
 routes(app).listen(port);

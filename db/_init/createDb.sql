@@ -28,7 +28,8 @@ create table account_types (
   id uuid primary key not null default (uuid_generate_v4()),
   name varchar not null,
   investment boolean not null default false,
-  interest_rate numeric(7, 4) not null default 0
+  interest_rate numeric(7, 4) not null default 0,
+  color varchar not null
 );
 
 create table transactions (

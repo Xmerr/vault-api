@@ -1,10 +1,11 @@
 insert into users (username, password, first_name, last_name, email, phone)
 values ('Xmer', '$2b$08$GAZDsOP6TJWe/1eAakVmbOAnicrm0/LIHntwsxbtGDMHA1b29DUiO', 'Wiley', 'Hilton', 'test@test.com', '555-555-5555');
 
-insert into account_types (name, investment, interest_rate)
+insert into account_types (name, investment, interest_rate, color)
 values
-('Checking', false, 0.05),
-('Savings', false, 1);
+('Checking', false, 0.25, '#6f629a'),
+('Savings', false, 2, '#09254e'),
+('Money Market', false, 1, '#30db6f');
 
 with acs as (
 	insert into public.accounts (account_type)
