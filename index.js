@@ -27,7 +27,7 @@ app.use(
         koaSwagger({
             routePrefix: '/swagger', // Where to find the docs
             swaggerOptions: {
-                url: 'http://api.bank.io/swag', // Where to pull the doc config from - should be moved to the .env file
+                url: 'http://api.bank.lan/swag', // Where to pull the doc config from - should be moved to the .env file
             },
         })
     )

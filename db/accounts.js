@@ -5,16 +5,22 @@ accountQueries.create = (accountObject, db) =>
         `
             with ac as (
                 insert into public.accounts (
-                    name,
                     account_type
                 ) values (
-                    $(name),
                     $(accountType)
                 )
                 returning id
+            ), atu as (
+                insert into public.accounts_to_users (nickname, user_id, account_id)
+                select $(nickname), $(userId), ac.id
+                from ac
             )
-            insert into public.accounts_to_users (user_id, account_id)
-            select $(userId), ac.id
+            insert into public.transactions (account_id, amount, name, details)
+            select 
+                ac.id,
+                $(value),
+                'Initial Deposit',
+                'Account created'
             from ac;
         `,
         accountObject
@@ -26,6 +32,7 @@ accountQueries.getAccountSummaries = (userId, db) =>
             select
                 atu.account_id id,
                 atu.nickname,
+                at2.name type_name,
                 at2.color,
                 sum(t.amount)::integer as current,
                 sum(t.amount)::integer as available,
@@ -44,6 +51,7 @@ accountQueries.getAccountSummaries = (userId, db) =>
                 at2.color,
                 at2.interest_rate,
                 at2.investment,
+                at2.name,
                 atu.account_id,
                 atu.nickname;
         `,

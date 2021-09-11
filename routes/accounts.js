@@ -23,17 +23,22 @@ const router = new Router({
  *                      schema:
  *                          type: object
  *                          required:
- *                            - name
+ *                            - nickname
  *                            - type
+ *                            - value
  *                          properties:
- *                              name:
+ *                              nickname:
  *                                  type: string
  *                                  description: Account Name
  *                                  example: Checking
  *                              type:
  *                                  type: string
  *                                  description: uuid of the account type - this can be located by using [GET /account-types]
- *                                  example: 1cd84456-0889-11ec-9a03-0242ac130003
+ *                                  example: 71b65b6f-37bc-483f-88c3-8e820a6e88d8
+ *                              value:
+ *                                  type: number
+ *                                  description: Initial value for the new account(without decimal points)
+ *                                  example: 500
  *          responses:
  *              201:
  *                  description: Account Successfully Created
@@ -43,18 +48,19 @@ router.post(
     userRequired,
     validator({
         body: yup.object().shape({
-            name: yup.string().required(),
+            nickname: yup.string().required(),
             type: yup.string().uuid().required(),
+            value: yup.number().required(),
         }),
     }),
     async ctx => {
         const {
-            body: { name, type },
+            body: { nickname, type, value },
             user: { id: userId },
             db,
         } = ctx.state;
 
-        await accounts.create({ accountType: type, name, userId }, db).catch(e => {
+        await accounts.create({ accountType: type, nickname, userId, value }, db).catch(e => {
             ctx.throw(500, e);
         });
 
