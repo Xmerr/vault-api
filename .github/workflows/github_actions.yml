@@ -26,6 +26,9 @@ jobs:
             # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
             - uses: actions/checkout@v2
 
+            - name: Installing Dependencies
+              run: yarn install
+
             - name: Running lint
               run: yarn lint
 
@@ -36,21 +39,8 @@ jobs:
         steps:
             - uses: actions/checkout@v2
 
-            - name: Installing Dependencies? again?
+            - name: Installing Dependencies
               run: yarn install
 
             - name: Running tests
               run: yarn test
-
-    fail:
-        runs-on: ubuntu-latest
-        name: This should fail
-
-        steps:
-            - uses: actions/checkout@v2
-
-            - name: Installing Dependencies? again?
-              run: yarn install
-
-            - name: Running tests
-              run: yarn test2
