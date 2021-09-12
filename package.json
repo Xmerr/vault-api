@@ -4,7 +4,8 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "lint": "eslint ."
+        "lint": "eslint .",
+        "test": "echo 'Tests not enabled'"
     },
     "dependencies": {
         "bcrypt": "^5.0.1",
