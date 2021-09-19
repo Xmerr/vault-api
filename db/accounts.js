@@ -31,6 +31,7 @@ accountQueries.getAccountSummaries = (userId, db) =>
         `
             select
                 atu.account_id id,
+                a.account_number, 
                 atu.nickname,
                 at2.name type_name,
                 at2.color,
@@ -48,6 +49,7 @@ accountQueries.getAccountSummaries = (userId, db) =>
                 on at2.id = a.account_type
             where atu.user_id = $(userId)
             group by
+                a.account_number,
                 at2.color,
                 at2.interest_rate,
                 at2.investment,

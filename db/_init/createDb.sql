@@ -1,4 +1,28 @@
-create extension if not exists "uuid-ossp";
+create or replace function generate_account_number() 
+    returns int as
+$$
+declare 
+  low int := 1011111111;
+  high int := 1959999999;
+  num varchar;
+  cnt int := 0;
+begin
+	loop
+		num := (floor(random()* (high-low + 1) + low))::varchar;
+	
+		select count(*)
+		into cnt
+		from public.accounts
+		where account_number = num;
+	
+		if cnt = 0 then
+			exit;
+		end if;
+	end loop;
+
+	return num;
+end;
+$$ language 'plpgsql' strict;
 
 create table users (
   id uuid primary key not null default (uuid_generate_v4()),
@@ -13,6 +37,7 @@ create table users (
 
 create table accounts (
   id uuid primary key not null default (uuid_generate_v4()),
+  account_number varchar not null unique default (generate_account_number())
   account_type uuid not null,
   opened_on timestamptz not null default (now())
 );
@@ -21,7 +46,8 @@ create table accounts_to_users (
   id uuid primary key not null default (uuid_generate_v4()),
   nickname varchar not null,
   user_id uuid not null,
-  account_id uuid not null
+  account_id uuid not null,
+  unique (nickname, user_id)
 );
 
 create table account_types (
