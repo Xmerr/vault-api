@@ -63,7 +63,6 @@ create table transactions (
   account_id uuid not null,
   amount integer not null,
   name varchar not null,
-  details varchar not null,
   created_on timestamptz  not null default (now())
 );
 

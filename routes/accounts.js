@@ -2,7 +2,8 @@ const Router = require('koa-router');
 const yup = require('yup');
 const validator = require('../middleware/validator');
 const userRequired = require('../middleware/userRequired');
-const accounts = require('../db/accounts');
+const accountsDb = require('../db/accounts');
+const transactionsDb = require('../db/transactions');
 
 const router = new Router({
     prefix: '/accounts',
@@ -60,7 +61,7 @@ router.post(
             db,
         } = ctx.state;
 
-        await accounts.create({ accountType: type, nickname, userId, value }, db).catch(e => {
+        await accountsDb.create({ accountType: type, nickname, userId, value }, db).catch(e => {
             ctx.throw(500, e);
         });
 
@@ -85,12 +86,59 @@ router.get('/', userRequired, async ctx => {
         db,
     } = ctx.state;
 
-    const accountList = await accounts.getAccountSummaries(userId, db).catch(e => {
+    const accountList = await accountsDb.getAccountSummaries(userId, db).catch(e => {
         ctx.throw(500, e);
     });
 
     ctx.status = 200;
     ctx.body = accountList;
+});
+
+/**
+ * @swagger
+ * /accounts/{id}:
+ *      get:
+ *          tags: [Account]
+ *          summary: Get account details
+ *          description: Gets details for the passed in account. Will only work if the user has access to the specified account
+ *          parameters:
+ *              - name: id
+ *                in: path
+ *                description: ID of the account
+ *                required: true
+ *                type: uuid
+ *          responses:
+ *              200:
+ *                  description: Success
+ *              404:
+ *                  description: Unable to find the account
+ */
+router.get('/:id', userRequired, async ctx => {
+    const {
+        user: { id: userId },
+        db,
+    } = ctx.state;
+    const { id } = ctx.params;
+    const today = new Date();
+    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    const startDate = new Date(today.getFullYear(), 0, 1);
+
+    const [account, transactions] = await Promise.all([
+        accountsDb.getAccountDetails(userId, id, db),
+        transactionsDb.getByAccount(userId, id, startDate, endDate, db),
+    ]).catch(e => {
+        ctx.throw(500, e);
+    });
+
+    if (!account) {
+        ctx.throw(404, 'Unable to find account');
+    }
+
+    ctx.status = 200;
+    ctx.body = {
+        account,
+        transactions,
+    };
 });
 
 module.exports = router;
