@@ -141,4 +141,67 @@ router.get('/:id', userRequired, async ctx => {
     };
 });
 
+/**
+ * @swagger
+ * /accounts/setNickname/{id}:
+ *      put:
+ *          tags: [Account]
+ *          summary: Changes the nickname for the specified account
+ *          description: Requires the account id and nickname to set. The user must have access to the account
+ *          requestBody:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          required:
+ *                            - nickname
+ *                          properties:
+ *                              nickname:
+ *                                  type: string
+ *                                  description: New name for the account
+ *                                  example: Checking
+ *          parameters:
+ *              - name: id
+ *                in: path
+ *                description: ID of the account
+ *                required: true
+ *                type: uuid
+ *          responses:
+ *              200:
+ *                  description: Nickname successfully changed
+ *              404:
+ *                  description: Account not found
+ *              409:
+ *                  description: Account name was not unique for this user
+ */
+router.put(
+    '/setNickname/:id',
+    userRequired,
+    validator({
+        body: yup.object().shape({
+            nickname: yup.string().required(),
+        }),
+    }),
+    async ctx => {
+        const {
+            body: { nickname },
+            user: { id: userId },
+            db,
+        } = ctx.state;
+        const { id } = ctx.params;
+
+        const account = await accountsDb.getAccountDetails(userId, id, db);
+
+        if (!account) {
+            ctx.throw(404, 'Unable to find account');
+        }
+
+        await accountsDb.setNickname(userId, id, nickname, db).catch(e => {
+            ctx.throw(409, 'Account names must be unique');
+        });
+
+        ctx.status = 200;
+    }
+);
+
 module.exports = router;

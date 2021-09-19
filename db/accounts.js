@@ -95,4 +95,16 @@ accountQueries.getAccountDetails = (userId, accountId, db) =>
         { accountId, userId }
     );
 
+accountQueries.setNickname = (userId, accountId, nickname, db) =>
+    db.oneOrNone(
+        `
+            update public.accounts_to_users
+            set nickname = $(nickname)
+            where user_id = $(userId)
+                and account_id = $(accountId)
+            returning *;
+        `,
+        { accountId, nickname, userId }
+    );
+
 module.exports = accountQueries;
